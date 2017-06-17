@@ -11,6 +11,7 @@ public class LibraryModule extends AbstractModule {
 
 	@Override
 	protected void configure() {
+		this.bind(FutureLineStorageWrapperFactory.class).to(FutureLineStorageWrapperFactoryImpl.class);
 		install(new FactoryModuleBuilder().implement(Dict.class, DictImpl.class)
 				.build(DictFactory.class));
 		/*install(new FactoryModuleBuilder().implement(DoubleKeyDict.class, DoubleKeyDictImpl.class)

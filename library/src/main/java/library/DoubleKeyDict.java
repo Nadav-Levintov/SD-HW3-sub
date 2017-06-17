@@ -1,10 +1,11 @@
 package library;
 
-import il.ac.technion.cs.sd.sub.ext.FutureLineStorage;
-
 import java.util.Map;
 import java.util.Optional;
 import java.util.concurrent.CompletableFuture;
+
+import il.ac.technion.cs.sd.buy.ext.FutureLineStorage;
+
 /**
  * creates three {@link FutureLineStorage} Implements a mapping from pairs of
  * keys using a {@link FutureLineStorage} and binary search. Allows adding

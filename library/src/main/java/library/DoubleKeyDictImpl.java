@@ -19,13 +19,11 @@ import il.ac.technion.cs.sd.buy.ext.FutureLineStorageFactory;
  * @see {@link DoubleKeyDictFactory} and {@link LibraryModule} for more info on
  *      how to create an instance
  */
-
-/*
 public class DoubleKeyDictImpl implements DoubleKeyDict {
 	private final Dict mainKeyDict;
 	private final Dict secondaryKeyDict;
 	private CompletableFuture<?> storingStatus;
-	private final CompletableFuture<il.ac.technion.cs.sd.sub.ext.FutureLineStorage> storer;
+	private final CompletableFuture<FutureLineStorageWrapper> storer;
 	private final Map<String, Map<String, String>> mainKeyMap = new HashMap<>();
 	private final Map<String, Map<String, String>> secondaryKeyMap = new HashMap<>();
 
@@ -42,7 +40,7 @@ public class DoubleKeyDictImpl implements DoubleKeyDict {
 	}
 
 	@Inject
-	public DoubleKeyDictImpl(DictFactory dictFactory, FutureLineStorageFactory lineStorageFactory,
+	public DoubleKeyDictImpl(DictFactory dictFactory, FutureLineStorageWrapperFactory lineStorageFactory,
 			@Assisted String name) {
 		storingStatus = storer = lineStorageFactory.open(name + ".valuesMap");
 		mainKeyDict = dictFactory.create(name + ".mainKeyMap");
@@ -123,4 +121,3 @@ public class DoubleKeyDictImpl implements DoubleKeyDict {
 		}).orElse(new HashMap<String, String>()));
 	}
 }
-*/

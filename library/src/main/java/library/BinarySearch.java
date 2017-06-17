@@ -4,8 +4,6 @@ import java.util.Optional;
 import java.util.concurrent.CompletableFuture;
 import java.util.function.Function;
 
-import il.ac.technion.cs.sd.buy.ext.FutureLineStorage;
-
 /**
  * A helper class of the Library, not meant for use by users
  * inculded the implementation of the binary search used by
@@ -15,17 +13,17 @@ class BinarySearch {
 	
 	/**
 	 * a version of valueOf where the high parameter is also
-	 * a completable future, to allow using {@link FutureLineStorage#numberOfLines()}
+	 * a completable future, to allow using {@link FutureLineStorageWrapper#numberOfLines()}
 	 * as the high value 
 	 * @see {@link #valueOf(CompletableFuture, String, int, int)}
 	 */
-	static CompletableFuture<Optional<String>> valueOf(CompletableFuture<FutureLineStorage> storer, String key, int low, CompletableFuture<Integer> high){
+	static CompletableFuture<Optional<String>> valueOf(CompletableFuture<FutureLineStorageWrapper> storer, String key, int low, CompletableFuture<Integer> high){
 		return high.thenCompose(h -> valueOf(storer,key,low,h));
 	}
 	
 	/**
-	 * performs an efficient binary search on a {@link FutureLineStorage}
-	 * @param storer the {@link FutureLineStorage}, written in a format of key in one line,
+	 * performs an efficient binary search on a {@link FutureLineStorageWrapper}
+	 * @param storer the {@link FutureLineStorageWrapper}, written in a format of key in one line,
 	 * followed by value in the next, sorted by key
 	 * @param key the key to be searched
 	 * @param low the line number of the first key, 0 for whole file search
@@ -33,11 +31,11 @@ class BinarySearch {
 	 * @return an Optional with the value saved for key, or Optional.empty() if the
 	 * key doesn't exist
 	 */
-	static CompletableFuture<Optional<String>> valueOf(CompletableFuture<FutureLineStorage> storer, String key, int low, int high) {
+	static CompletableFuture<Optional<String>> valueOf(CompletableFuture<FutureLineStorageWrapper> storer, String key, int low, int high) {
 		return of(storer,key,low/2,high/2-1);
 	}
 	
-	private static CompletableFuture<Optional<String>> of(CompletableFuture<FutureLineStorage> storer, String key, int low, int high) {
+	private static CompletableFuture<Optional<String>> of(CompletableFuture<FutureLineStorageWrapper> storer, String key, int low, int high) {
 		if (high < low)
 			return CompletableFuture.completedFuture(Optional.empty());
 		final int mid = (low + high) / 2;

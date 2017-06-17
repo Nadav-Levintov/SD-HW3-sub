@@ -2,14 +2,9 @@ package library;
 
 import com.google.inject.Guice;
 import com.google.inject.Injector;
-import il.ac.technion.cs.sd.sub.ext.LineStorageModule;
-import org.junit.Assert;
 import org.junit.Test;
 
-import java.util.LinkedList;
-import java.util.List;
-
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertTrue;
 
 /**
  * Created by Nadav on 17-Jun-17.
