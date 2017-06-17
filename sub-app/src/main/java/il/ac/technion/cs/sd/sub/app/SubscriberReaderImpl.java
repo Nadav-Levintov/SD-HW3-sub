@@ -67,31 +67,6 @@ public class SubscriberReaderImpl implements SubscriberReader {
 
     }
 
-    private CompletableFuture<Optional<Boolean>> userHistoryContains(String userId, String journalId,String val) {
-        CompletableFuture<Optional<String>> user = users_dict.find("userId");
-
-        return user.thenCompose(optional_user ->
-        {
-            if(!optional_user.isPresent())
-            {
-                return CompletableFuture.completedFuture(Optional.empty());
-            }
-
-            CompletableFuture<Optional<String>> history = user_journal_history_dict.findByKeys(userId, journalId);
-
-            return history.thenApply(optional_history -> {
-                if(!optional_history.isPresent())
-                {
-                    return Optional.of(Boolean.FALSE);
-                }
-                else{
-                    String hist_val = optional_history.get();
-                    return Optional.of(hist_val.contains(val));
-                }
-            });
-        });
-    }
-
     @Override
     public CompletableFuture<Optional<Boolean>> isCanceled(String userId, String journalId) {
         return isSubscribed(userId, journalId).thenApply(optional_bool ->
@@ -238,6 +213,8 @@ public class SubscriberReaderImpl implements SubscriberReader {
         });
     }
 
+
+    /*******PRIVATE*******/
     private List<Boolean> convert_history_from_string_to_bool_list(String history)
     {
         List<Boolean> res_list = new ArrayList<>();
@@ -250,6 +227,31 @@ public class SubscriberReaderImpl implements SubscriberReader {
         }
 
         return res_list;
+    }
+
+    private CompletableFuture<Optional<Boolean>> userHistoryContains(String userId, String journalId,String val) {
+        CompletableFuture<Optional<String>> user = users_dict.find("userId");
+
+        return user.thenCompose(optional_user ->
+        {
+            if(!optional_user.isPresent())
+            {
+                return CompletableFuture.completedFuture(Optional.empty());
+            }
+
+            CompletableFuture<Optional<String>> history = user_journal_history_dict.findByKeys(userId, journalId);
+
+            return history.thenApply(optional_history -> {
+                if(!optional_history.isPresent())
+                {
+                    return Optional.of(Boolean.FALSE);
+                }
+                else{
+                    String hist_val = optional_history.get();
+                    return Optional.of(hist_val.contains(val));
+                }
+            });
+        });
     }
 
 }
