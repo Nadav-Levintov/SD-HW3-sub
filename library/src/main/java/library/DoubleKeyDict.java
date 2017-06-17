@@ -40,7 +40,7 @@ public interface DoubleKeyDict {
 	/**
 	 * A search by the main key
 	 * 
-	 * @param key
+	 * @param mainKey
 	 * @return mapping from all secondary keys which match the main key to the
 	 *         value the two keys represent.
 	 */
@@ -59,7 +59,7 @@ public interface DoubleKeyDict {
 	/**
 	 * A search by the secondary key
 	 * 
-	 * @param key
+	 * @param secondaryKey
 	 * @return mapping from all main keys which match the secondary key to the
 	 *         value the two keys represent.
 	 */

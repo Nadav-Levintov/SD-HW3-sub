@@ -14,7 +14,6 @@
     <orderEntry type="sourceFolder" forTests="false" />
     <orderEntry type="module" module-name="sub-app" />
     <orderEntry type="module" module-name="library" />
-    <orderEntry type="library" name="Maven: il.ac.technion.cs.sd:buy-external:1.0" level="project" />
     <orderEntry type="library" name="Maven: com.google.guava:guava:22.0-android" level="project" />
     <orderEntry type="library" name="Maven: com.google.code.findbugs:jsr305:1.3.9" level="project" />
     <orderEntry type="library" name="Maven: com.google.errorprone:error_prone_annotations:2.0.18" level="project" />
