@@ -4,14 +4,13 @@ import java.util.Map;
 import java.util.Optional;
 import java.util.concurrent.CompletableFuture;
 
-import il.ac.technion.cs.sd.buy.ext.FutureLineStorage;
 
 /**
- * creates three {@link FutureLineStorage} Implements a mapping from pairs of
- * keys using a {@link FutureLineStorage} and binary search. Allows adding
+ * creates three {@link FutureLineStorageWrapper} Implements a mapping from pairs of
+ * keys using a {@link FutureLineStorageWrapper} and binary search. Allows adding
  * values until a {@link #store()} is performed, after which data is stored
  * persistently and additional adds will not affect the storage. <br>
- * Since only {@link FutureLineStorage} can be used to store data persistently,
+ * Since only {@link FutureLineStorageWrapper} can be used to store data persistently,
  * nothing stops you from calling {@link #store()} twice. However, that would
  * corrupt the {@link DoubleKeyDict}, so don't do that. For the same reason, you
  * can also read from the {@link DoubleKeyDict} before calling {@link #store()} or
@@ -28,7 +27,7 @@ public interface DoubleKeyDict {
 	public void add(String mainKey, String secondaryKey, String value);
 
 	/**
-	 * Performs the persistent write using {@link FutureLineStorage}
+	 * Performs the persistent write using {@link FutureLineStorageWrapper}
 	 * 
 	 * @return a {@link CompletableFuture} that shows whether the store was
 	 *         completed. User must make sure to wait on this before calling
@@ -41,7 +40,7 @@ public interface DoubleKeyDict {
 	/**
 	 * A search by the main key
 	 * 
-	 * @param mainKey
+	 * @param key
 	 * @return mapping from all secondary keys which match the main key to the
 	 *         value the two keys represent.
 	 */
@@ -60,7 +59,7 @@ public interface DoubleKeyDict {
 	/**
 	 * A search by the secondary key
 	 * 
-	 * @param secondaryKey
+	 * @param key
 	 * @return mapping from all main keys which match the secondary key to the
 	 *         value the two keys represent.
 	 */

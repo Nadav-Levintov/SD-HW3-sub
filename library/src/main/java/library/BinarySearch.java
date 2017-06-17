@@ -44,7 +44,7 @@ class BinarySearch {
 			public CompletableFuture<Optional<String>> apply(String current) {
 				int comparison = current.compareTo(key);
 				if (comparison == 0)
-					return storer.thenCompose(s->s.read(2 * mid + 1)).thenApply(Optional::of);
+					return storer.thenCompose(s->s.read(2 * mid + 1)).thenApply(s -> Optional.of(s));
 				if (comparison < 0)
 					return of(storer,key,mid+1,high);
 				return of(storer,key,low,mid-1);

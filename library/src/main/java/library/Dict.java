@@ -1,17 +1,15 @@
 package library;
 
-import java.util.Map;
+import com.google.common.collect.Multimap;
 import java.util.Optional;
 import java.util.concurrent.CompletableFuture;
 
-import il.ac.technion.cs.sd.buy.ext.FutureLineStorage;
-
 /**
- * Creates one {@link FutureLineStorage} Implements a basic dictionary using a
- * {@link FutureLineStorage} and binary search. Allows adding values until a
+ * Creates one {@link FutureLineStorageWrapper} Implements a basic dictionary using a
+ * {@link FutureLineStorageWrapper} and binary search. Allows adding values until a
  * {@link #store()} is performed, after which data is stored persistently and
  * additional adds will not affect the storage.<br>
- * Since only {@link FutureLineStorage} can be used to store data persistently,
+ * Since only {@link FutureLineStorageWrapper} can be used to store data persistently,
  * nothing stops you from calling {@link #store()} twice. However, that would
  * corrupt the {@link Dict}, so don't do that. For the same reason, you can also
  * read from the {@link Dict} before calling {@link #store()} or before it is
@@ -40,7 +38,7 @@ public interface Dict {
 	 * adds pairs to the Dict. Should only be called before a store operation
 	 * Does not save the data persistently.
 	 */
-	public void addAll(Map<String, String> m);
+	public void addAll(Multimap<String, String> m);
 
 	/**
 	 * @param key

@@ -1,6 +1,5 @@
 package library;
 
-import il.ac.technion.cs.sd.buy.ext.FutureLineStorage;
 
 /**
  * A factory of {@link DoubleKeyDict}. Use guice and {@link LibraryModule} to
@@ -13,7 +12,7 @@ public interface DoubleKeyDictFactory {
 	 *            the name of the {@link DoubleKeyDict}. to avoid collision,
 	 *            give each {@link Dict} and {@link DoubleKeyDict} its own name,
 	 *            made up only of letters.
-	 * @return a {@link DoubleKeyDict} using {@link FutureLineStorage}'s whose
+	 * @return a {@link DoubleKeyDict} using {@link FutureLineStorageWrapper}'s whose
 	 *         names are <br>
 	 *         {@code name + "." + additionalString}
 	 */

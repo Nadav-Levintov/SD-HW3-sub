@@ -6,15 +6,14 @@ import java.util.Optional;
 import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.ExecutionException;
 
+import com.google.common.collect.ArrayListMultimap;
+import com.google.common.collect.ListMultimap;
 import com.google.inject.Inject;
 import com.google.inject.assistedinject.Assisted;
 
-import il.ac.technion.cs.sd.buy.ext.FutureLineStorage;
-import il.ac.technion.cs.sd.buy.ext.FutureLineStorageFactory;
-
 /**
  * The provided implementation of {@link DoubleKeyDict}, using
- * {@link FutureLineStorage}
+ * {@link FutureLineStorageWrapper}
  * 
  * @see {@link DoubleKeyDictFactory} and {@link LibraryModule} for more info on
  *      how to create an instance
@@ -24,8 +23,8 @@ public class DoubleKeyDictImpl implements DoubleKeyDict {
 	private final Dict secondaryKeyDict;
 	private CompletableFuture<?> storingStatus;
 	private final CompletableFuture<FutureLineStorageWrapper> storer;
-	private final Map<String, Map<String, String>> mainKeyMap = new HashMap<>();
-	private final Map<String, Map<String, String>> secondaryKeyMap = new HashMap<>();
+	private final Map<String, ListMultimap<String, String>> mainKeyMap = new HashMap<>();
+	private final Map<String, ListMultimap<String, String>> secondaryKeyMap = new HashMap<>();
 
 	private class IntegerWrapper {
 		public int val;
@@ -61,11 +60,11 @@ public class DoubleKeyDictImpl implements DoubleKeyDict {
 		});
 	}
 
-	private CompletableFuture<?> storeDict(final Dict dict, final Map<String, Map<String, String>> m,
+	private CompletableFuture<?> storeDict(final Dict dict, final Map<String, ListMultimap<String, String>> m,
 			IntegerWrapper currentLine, CompletableFuture<?> currentStatus) {
 		CompletableFuture<?> status = currentStatus;
 		for (String key : m.keySet()) {
-			Map<String, String> current = m.get(key);
+			ListMultimap<String, String> current = m.get(key);
 			status = DictImpl.storeToStorage(current, storer, status);
 			int startingLine = currentLine.val;
 			currentLine.val += current.size() * 2;
@@ -75,9 +74,9 @@ public class DoubleKeyDictImpl implements DoubleKeyDict {
 		return status;
 	}
 
-	private void addToMap(final Map<String, Map<String, String>> m, String key1, String key2, String value) {
+	private void addToMap(final Map<String, ListMultimap<String, String>> m, String key1, String key2, String value) {
 		if (!m.containsKey(key1))
-			m.put(key1, new HashMap<>());
+			m.put(key1, ArrayListMultimap.create());
 		m.get(key1).put(key2, value);
 	}
 
