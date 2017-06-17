@@ -14,7 +14,7 @@ import static org.junit.Assert.*;
 public class SubscriberReaderImplTest {
     @Test
     public void isSubscribed() throws Exception {
-        Injector injector = Guice.createInjector(new SubscriberModule(),new TestLineStorageModule(),new LibraryModule());
+        Injector injector = Guice.createInjector(new SubscriberModule(),new TestLineStorageModule());
         SubscriberReader subscriberReader = injector.getInstance(SubscriberReader.class);
 
         assertTrue(Boolean.TRUE);
