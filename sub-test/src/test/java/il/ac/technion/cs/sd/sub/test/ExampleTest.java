@@ -21,12 +21,12 @@ import static org.junit.Assert.assertFalse;
 
 public class ExampleTest {
 
-  @Rule public Timeout globalTimeout = Timeout.seconds(30);
+  //@Rule public Timeout globalTimeout = Timeout.seconds(30);
 
   private static Injector setupAndGetInjector(String fileName) throws Exception {
       String fileContents =
         new Scanner(new File(ExampleTest.class.getResource(fileName).getFile())).useDelimiter("\\Z").next();
-    Injector injector = Guice.createInjector(new SubscriberModule(), new LineStorageModule());
+    Injector injector = Guice.createInjector(new SubscriberModule(), new TestLineStorageModule());
     SubscriberInitializer si = injector.getInstance(SubscriberInitializer.class);
     CompletableFuture<Void> setup =
         fileName.endsWith("csv") ? si.setupCsv(fileContents) : si.setupJson(fileContents);
