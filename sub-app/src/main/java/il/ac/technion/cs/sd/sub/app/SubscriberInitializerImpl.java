@@ -73,6 +73,10 @@ public class SubscriberInitializerImpl implements SubscriberInitializer {
             }
         }
 
+        return filter_data_init_dcits_and_store(users_list, journal_map, user_journal_history_map);
+    }
+
+    private CompletableFuture<Void> filter_data_init_dcits_and_store(List<String> users_list, Map<String, String> journal_map, Map<String, Map<String, String>> user_journal_history_map) {
         for (String user :
                 users_list) {
             users_dict.add(user,"1");
@@ -87,7 +91,10 @@ public class SubscriberInitializerImpl implements SubscriberInitializer {
 
             for (Map.Entry<String,String> journal_history :
                     user_map.getValue().entrySet()) {
-                user_journal_history_dict.add(user_map.getKey(),journal_history.getKey(),journal_history.getValue());
+                if(journal_map.containsKey(journal_history.getKey()))
+                {
+                    user_journal_history_dict.add(user_map.getKey(),journal_history.getKey(),journal_history.getValue());
+                }
             }
         }
 
@@ -95,11 +102,13 @@ public class SubscriberInitializerImpl implements SubscriberInitializer {
         journal_price_dict.store();
         user_journal_history_dict.store();
 
-        return status;
+        return CompletableFuture.completedFuture(null);
     }
 
     @Override
     public CompletableFuture<Void> setupJson(String jsonData) {
         return null;
     }
+
+
 }
