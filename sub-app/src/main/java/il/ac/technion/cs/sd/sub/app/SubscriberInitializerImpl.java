@@ -60,7 +60,11 @@ public class SubscriberInitializerImpl implements SubscriberInitializer {
                     if (line_values[0].equals("subscriber")) {
                         new_history = history.concat("1");
                     } else {
+                        if (history.charAt(history.length() - 1) == '0') {
+                            new_history = history;
+                        } else {
                             new_history = history.concat("0");
+                        }
                     }
                 }
                 else
