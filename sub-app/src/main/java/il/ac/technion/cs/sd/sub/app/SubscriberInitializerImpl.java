@@ -56,16 +56,19 @@ public class SubscriberInitializerImpl implements SubscriberInitializer {
 
                 String history = user_journal_history_map.get(line_values[1]).get(line_values[2]);
                 String new_history;
-                if(line_values[0].equals("subscriber"))
+                if( history != null) {
+                    if (line_values[0].equals("subscriber")) {
+                        new_history = history.concat("1");
+                    } else {
+                            new_history = history.concat("0");
+                    }
+                }
+                else
                 {
-
-                    new_history=history.concat("1");
-                }else
-                {
-                    if(history.charAt(history.length()-1) != '0')
-                        new_history=history.concat("0");
+                    if (line_values[0].equals("subscriber"))
+                        new_history = "1";
                     else
-                        new_history=history;
+                        new_history = "0";
                 }
                 Map<String, String> history_map_update = user_journal_history_map.get(line_values[1]);
                 history_map_update.put(line_values[2],new_history);
