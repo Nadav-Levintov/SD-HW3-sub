@@ -14,9 +14,9 @@ import java.util.stream.Collectors;
  * Created by Nadav on 17-Jun-17.
  */
 public class SubscriberReaderImpl implements SubscriberReader {
-    private final Dict journal_price_dict;
-    private final Dict users_dict;
-    private final DoubleKeyDict user_journal_history_dict;
+    protected Dict journal_price_dict;
+    protected Dict users_dict;
+    protected DoubleKeyDict user_journal_history_dict;
 
     @Inject
     public SubscriberReaderImpl(DictFactory dictFactory, DoubleKeyDictFactory doubleKeyDictFactory) {
@@ -27,6 +27,13 @@ public class SubscriberReaderImpl implements SubscriberReader {
         String double_dict_name = "User_journal_history";
         user_journal_history_dict = doubleKeyDictFactory.create(double_dict_name);
     }
+    protected SubscriberReaderImpl()
+    {
+        user_journal_history_dict=null;
+        users_dict = null;
+        journal_price_dict = null;
+    }
+
 
     @Override
     public CompletableFuture<Optional<Boolean>> isSubscribed(String userId, String journalId) {

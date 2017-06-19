@@ -34,10 +34,23 @@ public class ExampleTest {
     return injector;
   }
 
+  private static TestSubscriberInitializerImpl setupAndGetInitializer(String fileName) throws Exception {
+    String fileContents =
+            new Scanner(new File(ExampleTest.class.getResource(fileName).getFile())).useDelimiter("\\Z").next();
+    Injector injector = Guice.createInjector(new SubscriberModule(), new TestLineStorageModule());
+    TestSubscriberInitializerImpl si = injector.getInstance(TestSubscriberInitializerImpl.class);
+    CompletableFuture<Void> setup =
+            fileName.endsWith("csv") ? si.setupCsv(fileContents) : si.setupJson(fileContents);
+    setup.get();
+    return si;
+  }
+
   @Test
   public void testSimpleCsv() throws Exception {
-    Injector injector = setupAndGetInjector("small.csv");
-    SubscriberReader reader = injector.getInstance(SubscriberReader.class);
+    //Injector injector = setupAndGetInjector("small.csv");
+    //SubscriberReader reader = injector.getInstance(SubscriberReader.class);
+    TestSubscriberInitializerImpl initializer =  setupAndGetInitializer("small.csv");
+    SubscriberReader reader = new TestSubscriberReaderImpl(initializer.getUsers_dict(),initializer.getJournal_price_dict(),initializer.getUser_journal_history_dict());
     assertEquals(Arrays.asList(true, true, false), reader.getAllSubscriptions("foo1234").get().get("foo1234"));
     assertEquals(0, reader.getMonthlyBudget("foo1234").get().getAsInt());
     assertEquals(100, reader.getMonthlyIncome("foo1234").get().getAsInt());

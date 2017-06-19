@@ -16,9 +16,9 @@ import java.util.concurrent.CompletableFuture;
  * Created by Nadav on 17-Jun-17.
  */
 public class SubscriberInitializerImpl implements SubscriberInitializer {
-    private final Dict journal_price_dict;
-    private final Dict users_dict;
-    private final DoubleKeyDict user_journal_history_dict;
+    protected final Dict journal_price_dict;
+    protected final Dict users_dict;
+    protected final DoubleKeyDict user_journal_history_dict;
 
     @Inject
     public SubscriberInitializerImpl(DictFactory dictFactory, DoubleKeyDictFactory doubleKeyDictFactory) {
@@ -62,7 +62,10 @@ public class SubscriberInitializerImpl implements SubscriberInitializer {
                     new_history=history.concat("1");
                 }else
                 {
-                    new_history=history.concat("0");
+                    if(history.charAt(history.length()-1) != '0')
+                        new_history=history.concat("0");
+                    else
+                        new_history=history;
                 }
                 Map<String, String> history_map_update = user_journal_history_map.get(line_values[1]);
                 history_map_update.put(line_values[2],new_history);
