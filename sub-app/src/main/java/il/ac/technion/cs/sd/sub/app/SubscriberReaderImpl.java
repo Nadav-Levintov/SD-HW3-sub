@@ -99,8 +99,13 @@ public class SubscriberReaderImpl implements SubscriberReader {
             return CompletableFuture.completedFuture(Optional.of(false));
        // return userHistoryContains(userId, journalId,"0");
          });
+
        return user_exist.thenCombine(history,(usr,history_str)->{
            boolean found1 = false;
+           if(usr.get().equals(false))  //user does not exist
+               return Optional.empty();
+           if(!history_str.isPresent()) //case user never subscribed or canceled this journal
+               return Optional.of(false);
            for(int i=0; i<history_str.get().length(); i++)
            {
                if(0==Character.compare(history_str.get().charAt(i),'1')) {
@@ -110,6 +115,7 @@ public class SubscriberReaderImpl implements SubscriberReader {
                        return Optional.of(true);
                }
            }
+
            return Optional.of(false);
        }) ;
 
@@ -174,7 +180,7 @@ public class SubscriberReaderImpl implements SubscriberReader {
                     if(history.charAt(history.length()-1) == '1')
                     {
                         CompletableFuture<Optional<String>> journal_price = journal_price_dict.find(journal);
-                        res.thenCombine(journal_price, (res_val,price)-> res_val+=Integer.parseInt(price.get())).thenApply(i->i);
+                        res = res.thenCombine(journal_price, (res_val,price)-> res_val+=Integer.parseInt(price.get())).thenApply(i->i);
                     }
                 }
                 return res;
@@ -215,7 +221,7 @@ public class SubscriberReaderImpl implements SubscriberReader {
                 return CompletableFuture.completedFuture(OptionalInt.empty());
             }
             final Integer price = Integer.parseInt(optional_journal.get());
-            CompletableFuture<Map<String, String>> user_journal_history = user_journal_history_dict.findByMainKey(journalId);
+            CompletableFuture<Map<String, String>> user_journal_history = user_journal_history_dict.findBySecondaryKey(journalId);
             CompletableFuture<Integer> res_integer = user_journal_history.thenApply(map ->
             {
                 Integer sum=0;
