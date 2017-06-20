@@ -18,7 +18,7 @@ public class FutureLineStorageWrapperFactoryImpl implements FutureLineStorageWra
 
     @Override
     public CompletableFuture<FutureLineStorageWrapper> open(String s) {
-        return this.lineStorageFactory.open(s).thenCompose(r->
-                r.isPresent()? CompletableFuture.completedFuture(new FutureLineStorageWrapperImpl(r.get())): this.open(s));
+
+        return this.lineStorageFactory.open(s).thenCompose(r-> r.isPresent()? CompletableFuture.completedFuture(new FutureLineStorageWrapperImpl(r.get())) : this.open(s));
     }
 }
