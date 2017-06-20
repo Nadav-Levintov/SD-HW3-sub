@@ -1,10 +1,10 @@
 package il.ac.technion.cs.sd.sub.app;
 
-import com.google.inject.Guice;
 import com.google.inject.Inject;
-import com.google.inject.Injector;
-import il.ac.technion.cs.sd.sub.ext.LineStorageModule;
-import library.*;
+import library.Dict;
+import library.DictFactory;
+import library.DoubleKeyDict;
+import library.DoubleKeyDictFactory;
 
 import java.util.*;
 import java.util.concurrent.CompletableFuture;
@@ -37,7 +37,7 @@ public class SubscriberReaderImpl implements SubscriberReader {
 
     @Override
     public CompletableFuture<Optional<Boolean>> isSubscribed(String userId, String journalId) {
-        CompletableFuture<Optional<String>> user = users_dict.find("userId");
+        CompletableFuture<Optional<String>> user = users_dict.find(userId);
 
         return user.thenCompose(optional_user ->
         {
@@ -76,14 +76,45 @@ public class SubscriberReaderImpl implements SubscriberReader {
 
     @Override
     public CompletableFuture<Optional<Boolean>> isCanceled(String userId, String journalId) {
-        return isSubscribed(userId, journalId).thenApply(optional_bool ->
-                optional_bool.map(aBoolean -> !aBoolean));
+        CompletableFuture<Optional<Boolean>> wasSubscribed = wasSubscribed(userId,journalId);
+        return isSubscribed(userId, journalId).thenCombine(wasSubscribed,(is_bool, was_bool ) -> {
+            if(!is_bool.isPresent() || !was_bool.isPresent()) // both are empty same case
+                return is_bool;
+            if(was_bool.get().equals(false) && is_bool.get().equals(false)) //case not and wasn't subscribed (not canceled)
+            {
+                return is_bool;
+            }
+                return  is_bool.map(aBoolean -> !aBoolean);});
     }
 
     @Override
     public CompletableFuture<Optional<Boolean>> wasCanceled(String userId, String journalId) {
-        return userHistoryContains(userId, journalId,"0");
+
+        CompletableFuture<Optional<String>> history = user_journal_history_dict.findByKeys(userId, journalId);
+        CompletableFuture<Optional<String>> user = users_dict.find(userId);
+
+        CompletableFuture<Optional<Boolean>> user_exist = user.thenCompose(str -> {
+            if(str.isPresent())
+                return CompletableFuture.completedFuture(Optional.of(true));
+            return CompletableFuture.completedFuture(Optional.of(false));
+       // return userHistoryContains(userId, journalId,"0");
+         });
+       return user_exist.thenCombine(history,(usr,history_str)->{
+           boolean found1 = false;
+           for(int i=0; i<history_str.get().length(); i++)
+           {
+               if(0==Character.compare(history_str.get().charAt(i),'1')) {
+                   found1 = true;
+               }else{
+                   if(found1)
+                       return Optional.of(true);
+               }
+           }
+           return Optional.of(false);
+       }) ;
+
     }
+
 
     @Override
     public CompletableFuture<List<String>> getSubscribedJournals(String userId) {
@@ -237,7 +268,7 @@ public class SubscriberReaderImpl implements SubscriberReader {
     }
 
     private CompletableFuture<Optional<Boolean>> userHistoryContains(String userId, String journalId,String val) {
-        CompletableFuture<Optional<String>> user = users_dict.find("userId");
+        CompletableFuture<Optional<String>> user = users_dict.find(userId);
 
         return user.thenCompose(optional_user ->
         {

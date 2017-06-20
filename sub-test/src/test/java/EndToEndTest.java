@@ -5,9 +5,7 @@ import il.ac.technion.cs.sd.sub.app.SubscriberReader;
 import org.hamcrest.collection.IsIterableContainingInOrder;
 import org.junit.After;
 import org.junit.Assert;
-import org.junit.Rule;
 import org.junit.Test;
-import org.junit.rules.Timeout;
 
 import java.io.File;
 import java.io.FileNotFoundException;
@@ -280,7 +278,7 @@ public class EndToEndTest {
     public void userSubscribedToInvalidJournalShouldHaveNoBudget() throws Exception {
         setUp("ourSmall.csv");
         SubscriberReader reader = injector.getInstance(SubscriberReader.class);
-        Assert.assertFalse(reader.getMonthlyBudget("u6").get().isPresent());
+        Assert.assertEquals(reader.getMonthlyBudget("u6").get(), OptionalInt.of(0));
     }
     /*CSV does not pass */
     @Test

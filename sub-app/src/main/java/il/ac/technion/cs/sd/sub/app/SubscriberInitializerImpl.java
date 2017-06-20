@@ -2,6 +2,7 @@ package il.ac.technion.cs.sd.sub.app;
 
 
 import com.google.inject.Inject;
+import com.sun.deploy.util.StringUtils;
 import library.Dict;
 import library.DictFactory;
 import library.DoubleKeyDict;
@@ -93,7 +94,10 @@ public class SubscriberInitializerImpl implements SubscriberInitializer {
             for (Map.Entry<String,List<String>> journal_history : user_map.getValue().entrySet()) {
                 if(journal_map.containsKey(journal_history.getKey()))
                 {
-                    user_journal_history_dict.add(user_map.getKey(),journal_history.getKey(),journal_history.getValue().toArray().toString());
+
+                    List<String> list = journal_history.getValue();
+                    String value = StringUtils.join(list,"");
+                    user_journal_history_dict.add(user_map.getKey(),journal_history.getKey(),value);
                 }
             }
         }
@@ -131,17 +135,20 @@ public class SubscriberInitializerImpl implements SubscriberInitializer {
                     case "cancel":
                         String user_id = obj.getString("user-id");
                         String journal_id = obj.getString("journal-id");
-                        if(!users_set.contains(user_id))
-                        {
+                        if(!users_set.contains(user_id)) {                  // case first time see user
                             users_set.add(user_id);
                             Map<String,List<String>> user_history_map = new TreeMap<>();
-                            List<String> journal_history = new ArrayList<>();
-                            user_history_map.put(journal_id,journal_history);
                             user_journal_history_map.put(user_id,user_history_map);
+                        }
+                        if(!user_journal_history_map.get(user_id).containsKey(journal_id)){ // case first time user see journal
+                            List<String> journal_history = new ArrayList<>();
+                            user_journal_history_map.get(user_id).put(journal_id,journal_history);
                         }
                         List<String> j_history = user_journal_history_map.get(user_id).get(journal_id);
                         if(!(value.equals("0") && !j_history.isEmpty() && j_history.get(j_history.size()-1).equals("0")))  // case no cancel after cancel
-                            user_journal_history_map.get(user_id).get(journal_id).add(value);
+                            {
+                                user_journal_history_map.get(user_id).get(journal_id).add(value);
+                            }
                         break;
                     default:
                         System.out.println("JSON file is not legal");
