@@ -1,0 +1,14 @@
+[
+  {"type": "journal", "journal-id": "newsletter", "price": 100},
+  {"type": "journal", "journal-id": "aaa", "price": 250},
+  {"type": "subscription", "user-id": "nadav", "journal-id": "newsletter"},
+  {"type": "subscription", "user-id": "nadav", "journal-id": "aaa"},
+  {"type": "subscription", "user-id": "benny", "journal-id": "newsletter"},
+  {"type": "cancel", "user-id": "benny", "journal-id": "newsletter"},
+  {"type": "cancel", "user-id": "benny", "journal-id": "newsletter"},
+  {"type": "cancel", "user-id": "nadav", "journal-id": "aaa"},
+  {"type": "subscription", "user-id": "nadav", "journal-id": "aaa"},
+  {"type": "subscription", "user-id": "nadav", "journal-id": "aaa"},
+  {"type": "subscription", "user-id": "benny", "journal-id": "aaa"},
+  {"type": "cancel", "user-id": "benny", "journal-id": "aaa"}
+]

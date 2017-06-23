@@ -58,8 +58,10 @@ public class ExampleTest {
 
   @Test
   public void testSimpleJson() throws Exception {
-    Injector injector = setupAndGetInjector("small.json");
-    SubscriberReader reader = injector.getInstance(SubscriberReader.class);
+    //Injector injector = setupAndGetInjector("small.json");
+    //SubscriberReader reader = injector.getInstance(SubscriberReader.class);
+    TestSubscriberInitializerImpl initializer =  setupAndGetInitializer("small.json");
+    SubscriberReader reader = new TestSubscriberReaderImpl(initializer.getUsers_dict(),initializer.getJournal_price_dict(),initializer.getUser_journal_history_dict());
     assertEquals(100, reader.getMonthlyBudget("foo1234").get().getAsInt());
     assertFalse(reader.getMonthlyBudget("bar1234").get().isPresent());
   }

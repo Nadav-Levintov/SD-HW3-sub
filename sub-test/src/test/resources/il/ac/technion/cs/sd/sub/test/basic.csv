@@ -1,0 +1,12 @@
+journal,newsletter,100
+journal,aaa,250
+subscriber,nadav,newsletter
+subscriber,nadav,aaa
+subscriber,benny,newsletter
+cancel,benny,newsletter
+cancel,benny,newsletter
+cancel,nadav,aaa
+subscriber,nadav,aaa
+subscriber,nadav,aaa
+subscriber,benny,aaa
+cancel,benny,aaa
