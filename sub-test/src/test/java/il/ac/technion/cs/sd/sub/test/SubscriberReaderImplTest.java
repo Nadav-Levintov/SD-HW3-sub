@@ -3,8 +3,6 @@ package il.ac.technion.cs.sd.sub.test;
 import com.google.inject.Guice;
 import com.google.inject.Injector;
 import il.ac.technion.cs.sd.sub.app.SubscriberReader;
-import library.LibraryModule;
-import org.junit.Assert;
 import org.junit.Test;
 
 import java.io.File;
@@ -461,4 +459,24 @@ public class SubscriberReaderImplTest {
         assertTrue(val3.get().isEmpty());
     }
 
+    @Test
+    public void parsebigJsonFile() throws Exception {
+        TestSubscriberInitializerImpl initializer =  setupAndGetInitializer("ourBig.json");
+        SubscriberReader reader = new TestSubscriberReaderImpl(initializer.getUsers_dict(),initializer.getJournal_price_dict(),initializer.getUser_journal_history_dict());
+
+    }
+
+    @Test
+    public void parsebigCsvFile() throws Exception {
+        TestSubscriberInitializerImpl initializer =  setupAndGetInitializer("ourBig.csv");
+        SubscriberReader reader = new TestSubscriberReaderImpl(initializer.getUsers_dict(),initializer.getJournal_price_dict(),initializer.getUser_journal_history_dict());
+
+    }
+
+    @Test
+    public void parseMediumJsonFile() throws Exception {
+        TestSubscriberInitializerImpl initializer =  setupAndGetInitializer("ourMedium.json");
+        SubscriberReader reader = new TestSubscriberReaderImpl(initializer.getUsers_dict(),initializer.getJournal_price_dict(),initializer.getUser_journal_history_dict());
+
+    }
 }

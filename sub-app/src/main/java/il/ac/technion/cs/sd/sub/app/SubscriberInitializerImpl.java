@@ -80,8 +80,7 @@ public class SubscriberInitializerImpl implements SubscriberInitializer {
     }
 
     private CompletableFuture<Void> filter_data_init_dcits_and_store(Set<String> users_set, Map<String, String> journal_map, Map<String, Map<String,List<String>>> user_journal_history_map) {
-        for (String user :
-                users_set) {
+        for (String user : users_set) {
             users_dict.add(user,"1");
         }
 
@@ -89,6 +88,7 @@ public class SubscriberInitializerImpl implements SubscriberInitializer {
                 journal_map.entrySet()) {
             journal_price_dict.add(journal.getKey(),journal.getValue());
         }
+
         for (Map.Entry<String,Map<String,List<String>>> user_map : user_journal_history_map.entrySet())
         {
             for (Map.Entry<String,List<String>> journal_history : user_map.getValue().entrySet()) {
